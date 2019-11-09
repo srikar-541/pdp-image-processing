@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import control.commands.Blur;
 import control.commands.GreyScale;
-import control.commands.Rainbow;
+import control.commands.HorizontalRainbow;
 import control.commands.Save;
 import control.commands.Sepia;
 import control.commands.Sharpen;
@@ -51,7 +51,8 @@ public class CommandController {
           case "quit":
             return;
           case "load":
-            BufferedImage img=readImage("input/mario.png");
+            BufferedImage img=readImage("input/manhattan-small.png");
+//            BufferedImage img=readImage("input/mario.png");
             model=new ImageProcessor(img);
             break;
           case "sepia":
@@ -69,17 +70,23 @@ public class CommandController {
           case "save":
             cmd=new Save("output/model.png");
             break;
+//          case "rainbow h":
+//            int height = s.nextInt();
+//            int width = s.nextInt();
+//            model=new ImageProcessor(width, height *7);
+//            cmd=new Rainbow(width, height);
+//            break;
           case "rainbow h":
-            int height = s.nextInt();
-            int width = s.nextInt();
-            model=new ImageProcessor(width, height *7);
-            cmd=new Rainbow(width, height);
+            int thickness = s.nextInt();
+            int length = s.nextInt();
+            model=new ImageProcessor(length, thickness *7);
+            cmd=new HorizontalRainbow(length, thickness);
             break;
           case "rainbow v":
-            height = s.nextInt();
-            width = s.nextInt();
-            model=new ImageProcessor(width, height *7);
-            cmd=new Rainbow(width, height);
+            thickness = s.nextInt();
+            length = s.nextInt();
+            model=new ImageProcessor(length, thickness *7);
+            cmd=new HorizontalRainbow(length, thickness);
             break;
         }
         if (cmd != null) {

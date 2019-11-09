@@ -12,57 +12,67 @@ public class ImageProcessor implements ImageModel {
   private final int width;
 //  private int[][] alphas;
 
-  public ImageProcessor(BufferedImage image){
-    this.width=image.getHeight();
-    this.height=image.getWidth();
-    this.reds=new int[height][width];
-    this.greens=new int [height][width];
-    this.blues=new int [height][width];
+  public ImageProcessor(BufferedImage image) {
+    this.width = image.getWidth();
+    this.height = image.getHeight();
+
+    this.reds = new int[height][width];
+    this.greens = new int[height][width];
+    this.blues = new int[height][width];
 //    this.alphas=new int [height][height];
-    for(int i=0;i<height;i++){
-      for(int j=0;j<width;j++){
-        int pixel=image.getRGB(i,j);
-        Color color=new Color(pixel);
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        int pixel = image.getRGB(j, i);
+        Color color = new Color(pixel);
         reds[i][j] = color.getRed();
-        greens[i][j]=color.getGreen();
-        blues[i][j]=color.getBlue();
+        greens[i][j] = color.getGreen();
+        blues[i][j] = color.getBlue();
+
 //        alphas[i][j]=color.getAlpha();
       }
     }
+//    System.out.println(this.height);
+//    System.out.println(this.width);
+//    System.out.println(reds.length);
+//    System.out.println(reds[0].length);
   }
 
-  public ImageProcessor(int height, int width){
-    this.width=width;
-    this.height=height;
-    this.reds=new int[height][width];
-    this.greens=new int [height][width];
-    this.blues=new int [height][width];
+  public ImageProcessor(int width, int height) {
+    this.width = width;
+    this.height = height;
+
+    this.reds = new int[height][width];
+    this.greens = new int[height][width];
+    this.blues = new int[height][width];
 //    this.alphas=new int [height][height];
   }
 
-  private int clamp(int value){
-    if(value<0){return 0;}
-    return Math.min(255,value);
+  private int clamp(int value) {
+    if (value < 0) {
+      return 0;
+    }
+    return Math.min(255, value);
   }
 
-  private int pixelVal(int alpha, int red, int green, int blue){
-    return  (alpha<<24) | (red<<16) | (green<<8) | blue;
+  private int pixelVal(int alpha, int red, int green, int blue) {
+    return (alpha << 24) | (red << 16) | (green << 8) | blue;
   }
 
-  private int pixelVal2( int red, int green, int blue){
-    return    (red<<16) | (green<<8) | blue;
+  private int pixelVal2(int red, int green, int blue) {
+    return (red << 16) | (green << 8) | blue;
   }
 
   @Override
   public BufferedImage getImage() {
-    BufferedImage result=new BufferedImage(height,width,BufferedImage.TYPE_INT_RGB);
-    for(int i=0;i<this.height;i++){
-      for(int j=0;j<this.width;j++){
+    BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
 //        int pixel= pixelVal(this.alphas[i][j],this.reds[i][j],this.greens[i][j],this.blues[i][j]);
 //        int pixel= pixelVal(255,this.reds[i][j],this.greens[i][j],this.blues[i][j]);
-        int pixel= pixelVal2(this.reds[i][j],this.greens[i][j],this.blues[i][j]);
+        int pixel = pixelVal2(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
 
-        result.setRGB(i,j,pixel);
+        result.setRGB(j, i, pixel);
       }
     }
     return result;
@@ -97,14 +107,14 @@ public class ImageProcessor implements ImageModel {
 
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        tempR[i][j] = clamp((int)Math.round(transformHelper(this.reds, filter, i, j)));
-        tempG[i][j] = clamp((int)Math.round(transformHelper(this.greens, filter, i, j)));
-        tempB[i][j] =clamp((int)Math.round(transformHelper(this.blues, filter, i, j)));
+        tempR[i][j] = clamp((int) Math.round(transformHelper(this.reds, filter, i, j)));
+        tempG[i][j] = clamp((int) Math.round(transformHelper(this.greens, filter, i, j)));
+        tempB[i][j] = clamp((int) Math.round(transformHelper(this.blues, filter, i, j)));
       }
     }
-    this.reds=tempR;
-    this.greens=tempG;
-    this.blues=tempB;
+    this.reds = tempR;
+    this.greens = tempG;
+    this.blues = tempB;
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         this.reds[i][j] = tempR[i][j];
@@ -164,10 +174,10 @@ public class ImageProcessor implements ImageModel {
   }
 
   @Override
-  public void setRed(int x, int y, int red)  {
+  public void setRed(int x, int y, int red) {
     try {
-      this.reds[x][y] = clamp(red);
-    } catch(IndexOutOfBoundsException iob){
+      this.reds[y][x] = clamp(red);
+    } catch (IndexOutOfBoundsException iob) {
       throw iob;
     }
   }
@@ -175,8 +185,8 @@ public class ImageProcessor implements ImageModel {
   @Override
   public void setGreen(int x, int y, int green) {
     try {
-    this.greens[x][y]=clamp(green);
-    } catch(IndexOutOfBoundsException iob){
+      this.greens[y][x] = clamp(green);
+    } catch (IndexOutOfBoundsException iob) {
       throw iob;
     }
   }
@@ -184,10 +194,10 @@ public class ImageProcessor implements ImageModel {
   @Override
   public void setBlue(int x, int y, int blue) {
     try {
-    this.blues[x][y]=clamp(blue);
-  } catch(IndexOutOfBoundsException iob){
-    throw iob;
-  }
+      this.blues[y][x] = clamp(blue);
+    } catch (IndexOutOfBoundsException iob) {
+      throw iob;
+    }
   }
 
   @Override
@@ -201,43 +211,43 @@ public class ImageProcessor implements ImageModel {
 
   @Override
   public void setPixel(int x, int y, int pixel) {
-    Color color=new Color(pixel);
-    int red=color.getRed();
-    int green=color.getGreen();
-    int blue=color.getBlue();
-    int alpha=color.getAlpha();
+    Color color = new Color(pixel);
+    int red = color.getRed();
+    int green = color.getGreen();
+    int blue = color.getBlue();
+    int alpha = color.getAlpha();
     try {
       this.reds[x][y] = clamp(red);
-      this.greens[x][y]=clamp(green);
-      this.blues[x][y]=clamp(blue);
+      this.greens[x][y] = clamp(green);
+      this.blues[x][y] = clamp(blue);
 //      this.alphas[x][y]=clamp(alpha);
-        } catch(IndexOutOfBoundsException iob){
-        throw iob;
-        }
+    } catch (IndexOutOfBoundsException iob) {
+      throw iob;
+    }
   }
 
   public void setPixel(int x, int y, Color pixelColor) {
-    int red=pixelColor.getRed();
-    int green=pixelColor.getGreen();
-    int blue=pixelColor.getBlue();
-    int alpha=pixelColor.getAlpha();
+    int red = pixelColor.getRed();
+    int green = pixelColor.getGreen();
+    int blue = pixelColor.getBlue();
+    int alpha = pixelColor.getAlpha();
     try {
       this.reds[x][y] = clamp(red);
-      this.greens[x][y]=clamp(green);
-      this.blues[x][y]=clamp(blue);
+      this.greens[x][y] = clamp(green);
+      this.blues[x][y] = clamp(blue);
 //      this.alphas[x][y]=clamp(alpha);
-    } catch(IndexOutOfBoundsException iob){
+    } catch (IndexOutOfBoundsException iob) {
       throw iob;
     }
   }
 
   @Override
-  public void drawVerticalLine(int x1, int y1, int length, Color lineColor){
-    int red=lineColor.getRed();
-    int green=lineColor.getGreen();
-    int blue=lineColor.getBlue();
+  public void drawVerticalLine(int x1, int y1, int length, Color lineColor) {
+    int red = lineColor.getRed();
+    int green = lineColor.getGreen();
+    int blue = lineColor.getBlue();
 
-    if (y1 + length > width) {
+    if (y1 + length > this.height) {
       throw new IllegalArgumentException("Illegal argument of length while line draw");
     }
 
@@ -249,12 +259,12 @@ public class ImageProcessor implements ImageModel {
   }
 
   @Override
-  public void drawHorizontalLine(int x1, int y1, int length, Color lineColor){
-    int red=lineColor.getRed();
-    int green=lineColor.getGreen();
-    int blue=lineColor.getBlue();
+  public void drawHorizontalLine(int x1, int y1, int length, Color lineColor) {
+    int red = lineColor.getRed();
+    int green = lineColor.getGreen();
+    int blue = lineColor.getBlue();
 
-    if (x1 + length > height) {
+    if (x1 + length > this.width) {
       throw new IllegalArgumentException("Illegal argument of length while line draw");
     }
 
@@ -267,8 +277,8 @@ public class ImageProcessor implements ImageModel {
 
   @Override
   public void drawHorizontalBand(int x1, int y1, int x2, int y2, Color bandColor) {
-    for (int i = 0; i < Math.abs(y1 - y2); i++) {
-      drawHorizontalLine(x1, i + y1, Math.abs(x2 - x1), bandColor);
+    for (int i = 0; i <= Math.abs(y1 - y2); i++) {
+      drawHorizontalLine(x1, i + y1, Math.abs(x2 - x1) + 1, bandColor);
     }
   }
 }

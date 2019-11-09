@@ -7,14 +7,14 @@ import java.util.List;
 import control.ImageProcessingCommand;
 import model.ImageModel;
 
-public class Rainbow implements ImageProcessingCommand {
-  private int height;
-  private int width;
+public class HorizontalRainbow implements ImageProcessingCommand {
+  private int length;
+  private int thickness;
   List<Color> colorList;
 
-  public Rainbow(int height, int width ){
-    this.height=width;
-    this.width=height;
+  public HorizontalRainbow(int length, int thickness){
+    this.length=length;
+    this.thickness=thickness;
     colorList = new ArrayList<>(7);
     colorList.add(new Color(148, 0, 211));
     colorList.add(new Color(75, 0, 130));
@@ -28,12 +28,10 @@ public class Rainbow implements ImageProcessingCommand {
   @Override
   public void go(ImageModel model) {
 
-    int i = 0;
-    int stripSize = this.height ;
-    for (; i < 6; i++) {
-      model.drawHorizontalBand(0, i*stripSize, width, (i + 1) * stripSize + 1,
+    int stripSize = this.thickness;
+    for (int i = 0; i < 7; i++) {
+      model.drawHorizontalBand(0, i * stripSize, length - 1, (i + 1) * stripSize - 1,
               colorList.get(i));
     }
-    model.drawHorizontalBand(0, i * stripSize, width, (i + 1) * stripSize , colorList.get(6));
   }
 }
