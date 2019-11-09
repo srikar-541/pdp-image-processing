@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 import control.commands.Blur;
+import control.commands.CheckeredBoard;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
 import control.commands.Save;
@@ -79,6 +80,11 @@ public class CommandController {
             int bandwidth = s.nextInt();
             model=new ImageProcessor(bandwidth * 7, height);
             cmd=new VerticalRainbow(height, bandwidth);
+            break;
+          case "checkeredBoard":
+            int size = s.nextInt();
+            model = new ImageProcessor(8 * size, 8 * size);
+            cmd = new CheckeredBoard(size);
             break;
         }
         if (cmd != null) {
