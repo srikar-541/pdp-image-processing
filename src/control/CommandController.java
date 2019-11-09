@@ -51,7 +51,7 @@ public class CommandController {
           case "quit":
             return;
           case "load":
-            BufferedImage img=readImage("input/ACbig.jpg");
+            BufferedImage img=readImage("input/mario.png");
             model=new ImageProcessor(img);
             break;
           case "sepia":
