@@ -281,4 +281,11 @@ public class ImageProcessor implements ImageModel {
       drawHorizontalLine(x1, i + y1, Math.abs(x2 - x1) + 1, bandColor);
     }
   }
+
+  @Override
+  public void drawVerticalBand(int x1, int y1, int x2, int y2, Color bandColor) {
+    for (int i = 0; i <= Math.abs(x1 - x2); i++) {
+      drawVerticalLine(i + x1, y1, Math.abs(y2 - y1) + 1, bandColor);
+    }
+  }
 }

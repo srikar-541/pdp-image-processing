@@ -14,6 +14,7 @@ import control.commands.HorizontalRainbow;
 import control.commands.Save;
 import control.commands.Sepia;
 import control.commands.Sharpen;
+import control.commands.VerticalRainbow;
 import model.ImageModel;
 import model.ImageProcessor;
 
@@ -33,9 +34,6 @@ public class CommandController {
     System.out.println("height: "+image.getHeight());
     return image;
   }
-
-
-
 
 //  main start
   public static void main(String[]  args){
@@ -70,12 +68,6 @@ public class CommandController {
           case "save":
             cmd=new Save("output/model.png");
             break;
-//          case "rainbow h":
-//            int height = s.nextInt();
-//            int width = s.nextInt();
-//            model=new ImageProcessor(width, height *7);
-//            cmd=new Rainbow(width, height);
-//            break;
           case "rainbow h":
             int thickness = s.nextInt();
             int length = s.nextInt();
@@ -83,10 +75,10 @@ public class CommandController {
             cmd=new HorizontalRainbow(length, thickness);
             break;
           case "rainbow v":
-            thickness = s.nextInt();
-            length = s.nextInt();
-            model=new ImageProcessor(length, thickness *7);
-            cmd=new HorizontalRainbow(length, thickness);
+            int height = s.nextInt();
+            int bandwidth = s.nextInt();
+            model=new ImageProcessor(bandwidth * 7, height);
+            cmd=new VerticalRainbow(height, bandwidth);
             break;
         }
         if (cmd != null) {
