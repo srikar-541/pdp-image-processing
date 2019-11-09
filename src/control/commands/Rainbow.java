@@ -28,17 +28,12 @@ public class Rainbow implements ImageProcessingCommand {
   @Override
   public void go(ImageModel model) {
 
-    int stripSize = this.height / 7;
-    for (int i = 0; i < 6; i++) {
+    int i = 0;
+    int stripSize = this.height ;
+    for (; i < 6; i++) {
       model.drawHorizontalBand(0, i*stripSize, width, (i + 1) * stripSize + 1,
               colorList.get(i));
     }
-    model.drawHorizontalBand(0, 6 * stripSize, width, height, colorList.get(6));
-
-    int rem = this.height % 7;
-    for (int i = 0; i < rem; i++) {
-      model.drawHorizontalBand(0, i*stripSize, width - 1, (i + 1) * stripSize - 1,
-              colorList.get(i));
-    }
+    model.drawHorizontalBand(0, i * stripSize, width, (i + 1) * stripSize , colorList.get(6));
   }
 }

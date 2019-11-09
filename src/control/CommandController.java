@@ -73,8 +73,8 @@ public class CommandController {
 
             int height = s.nextInt();
             int width = s.nextInt();
-            model=new ImageProcessor(height,width);
-            cmd=new Rainbow(height, width);
+            model=new ImageProcessor(width, height *7);
+            cmd=new Rainbow(width, height);
             break;
         }
         if (cmd != null) {
