@@ -69,10 +69,15 @@ public class CommandController {
           case "save":
             cmd=new Save("output/model.png");
             break;
-          case "rainbow v":
-
+          case "rainbow h":
             int height = s.nextInt();
             int width = s.nextInt();
+            model=new ImageProcessor(width, height *7);
+            cmd=new Rainbow(width, height);
+            break;
+          case "rainbow v":
+            height = s.nextInt();
+            width = s.nextInt();
             model=new ImageProcessor(width, height *7);
             cmd=new Rainbow(width, height);
             break;
