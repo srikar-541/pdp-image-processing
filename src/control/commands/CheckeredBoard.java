@@ -8,18 +8,20 @@ import model.ImageModel;
 public class CheckeredBoard implements ImageProcessingCommand {
 
   private final int squareSize;
-  private final int length;
+  private final int rowsCount;
+  private final int colsCount;
 
-  public CheckeredBoard(int squareSize) {
+  public CheckeredBoard(int rowsCount, int colsCount, int squareSize) {
+    this.rowsCount = rowsCount;
+    this.colsCount = colsCount;
     this.squareSize = squareSize;
-    this.length = 8;
   }
 
   @Override
   public void go(ImageModel model) {
-    for (int i = 0; i < this.length; i++) {
+    for (int i = 0; i < this.rowsCount; i++) {
       int boxNumber = i % 2 == 0 ? 0 : 1;
-      for (int j = 0; j < this.length; j++) {
+      for (int j = 0; j < this.colsCount; j++) {
         Color color;
         if (boxNumber % 2 == 0) {
           color = Color.WHITE;
@@ -27,8 +29,8 @@ public class CheckeredBoard implements ImageProcessingCommand {
         else {
           color = Color.BLACK;
         }
-        model.drawHorizontalBand(i * squareSize, j * squareSize, (i + 1) * squareSize - 1,
-                (j + 1) * squareSize - 1, color);
+        model.drawHorizontalBand(j * squareSize, i * squareSize, (j + 1) * squareSize - 1,
+                (i + 1) * squareSize - 1, color);
         boxNumber++;
       }
     }
