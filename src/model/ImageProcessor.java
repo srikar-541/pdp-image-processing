@@ -118,44 +118,47 @@ public class ImageProcessor implements ImageModel {
   }
 
   private double transformHelper(int[][] original, double[][] kernel, int rowIndex, int colIndex) {
-
     int mid = kernel.length / 2;
+    int width = original[0].length;
+    int height = original.length;
     double sum = 0;
-    int kIStart = 0;
-    int kJStart = 0;
-    int kIEnd = kernel.length - 1;
-    int kJEnd = kernel.length - 1;
+    int kernelRowStartIndex = 0;
+    int kernelColStartIndex = 0;
+    int kernelRowEndIndex = kernel.length - 1;
+    int kernelColEndIndex = kernel.length - 1;
     int i = rowIndex;
     int j = colIndex;
 
-    while (i - mid < 0) {
-      kIStart++;
-      i++;
-    }
-
-    while (j - mid < 0) {
-      kJStart++;
-      j++;
+    while (i < mid || j < mid) {
+      if (i < mid) {
+        kernelRowStartIndex++;
+        i++;
+      }
+      if (j < mid) {
+        kernelColStartIndex++;
+        j++;
+      }
     }
 
     i = rowIndex;
     j = colIndex;
 
-    while (i + mid >= original.length) {
-      kIEnd--;
-      i--;
-    }
-
-    while (j + mid >= original[0].length) {
-      kJEnd--;
-      j--;
+    while ((i + mid >= height) || (j + mid >= width)) {
+      if (i + mid >= height) {
+        kernelRowEndIndex--;
+        i--;
+      }
+      if (j + mid >= width) {
+        kernelColEndIndex--;
+        j--;
+      }
     }
 
     int oI = Math.max(0, rowIndex - mid);
     int oJ = Math.max(0, colIndex - mid);
 
-    for (i = kIStart; i <= kIEnd; i++) {
-      for (j = kJStart; j <= kJEnd; j++) {
+    for (i = kernelRowStartIndex; i <= kernelRowEndIndex; i++) {
+      for (j = kernelColStartIndex; j <= kernelColEndIndex; j++) {
         sum = sum + kernel[i][j] * original[oI][oJ];
         oJ++;
       }
