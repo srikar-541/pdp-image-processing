@@ -115,13 +115,6 @@ public class ImageProcessor implements ImageModel {
     this.reds = tempR;
     this.greens = tempG;
     this.blues = tempB;
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        this.reds[i][j] = tempR[i][j];
-        this.greens[i][j] = tempG[i][j];
-        this.blues[i][j] = tempB[i][j];
-      }
-    }
   }
 
   private double transformHelper(int[][] original, double[][] kernel, int rowIndex, int colIndex) {
