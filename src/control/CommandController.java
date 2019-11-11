@@ -10,8 +10,11 @@ import javax.imageio.ImageIO;
 
 import control.commands.Blur;
 import control.commands.CheckeredBoard;
+import control.commands.Edge;
+import control.commands.GaussianBlur;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
+import control.commands.MotionBlur;
 import control.commands.Save;
 import control.commands.Sepia;
 import control.commands.Sharpen;
@@ -50,7 +53,7 @@ public class CommandController {
           case "quit":
             return;
           case "load":
-            BufferedImage img = readImage("input/manhattan-small.png");
+            BufferedImage img = readImage("input/ACbig.jpg");
 //            BufferedImage img=readImage("input/mario.png");
             model = new ImageProcessor(img);
             break;
@@ -62,6 +65,16 @@ public class CommandController {
             break;
           case "blur":
             cmd = new Blur();
+            break;
+          case "motionblur":
+            cmd = new MotionBlur();
+            break;
+          case "gaussianblur":
+            cmd = new GaussianBlur();
+            break;
+
+          case "edge":
+            cmd = new Edge();
             break;
           case "sharpen":
             cmd = new Sharpen();
