@@ -42,7 +42,6 @@ public class CommandController {
     return image;
   }
 
-  //  main start
   public static void main(String[] args) {
 
     Scanner s = new Scanner(System.in);
@@ -56,8 +55,8 @@ public class CommandController {
           case "quit":
             return;
           case "load":
-            BufferedImage img = readImage("input/AC2.jpg");
-//            BufferedImage img=readImage("input/mario.png");
+            String filePath = s.nextLine();
+            BufferedImage img = readImage(filePath);
             model = new ImageProcessor(img);
             break;
           case "sepia":
@@ -76,14 +75,14 @@ public class CommandController {
             cmd = new GaussianBlur();
             break;
           case "france":
-            int width=s.nextInt();
-            model=new ImageProcessor(width,(2*width)/3);
-            cmd=new FranceFlag(width);
+            int width = s.nextInt();
+            model = new ImageProcessor(width, (2 * width) / 3);
+            cmd = new FranceFlag(width);
             break;
           case "switzerland":
-            width=s.nextInt();
-            model=new ImageProcessor(width,width);
-            cmd=new Switzerland(width);
+            width = s.nextInt();
+            model = new ImageProcessor(width, width);
+            cmd = new Switzerland(width);
             break;
           case "edge":
             cmd = new Edge();

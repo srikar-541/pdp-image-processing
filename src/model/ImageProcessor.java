@@ -45,11 +45,7 @@ public class ImageProcessor implements ImageModel {
     return Math.min(255, value);
   }
 
-  private int pixelVal(int alpha, int red, int green, int blue) {
-    return (alpha << 24) | (red << 16) | (green << 8) | blue;
-  }
-
-  private int pixelVal2(int red, int green, int blue) {
+  private int pixelVal(int red, int green, int blue) {
     return (red << 16) | (green << 8) | blue;
   }
 
@@ -59,7 +55,7 @@ public class ImageProcessor implements ImageModel {
 
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        int pixel = pixelVal2(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
+        int pixel = pixelVal(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
 
         result.setRGB(j, i, pixel);
       }
@@ -90,10 +86,6 @@ public class ImageProcessor implements ImageModel {
 
   @Override
   public void filter(double[][] filter) {
-    int[][] tempR = new int[this.height][this.width];
-    int[][] tempG = new int[this.height][this.width];
-    int[][] tempB = new int[this.height][this.width];
-
     this.reds = convolute(filter, this.reds);
     this.greens = convolute(filter, this.greens);
     this.blues = convolute(filter, this.blues);
@@ -142,20 +134,6 @@ public class ImageProcessor implements ImageModel {
       this.greens[x][y] = clamp(green);
       this.blues[x][y] = clamp(blue);
 
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
-  }
-
-  public void setPixel(int x, int y, Color pixelColor) {
-    int red = pixelColor.getRed();
-    int green = pixelColor.getGreen();
-    int blue = pixelColor.getBlue();
-    int alpha = pixelColor.getAlpha();
-    try {
-      this.reds[x][y] = clamp(red);
-      this.greens[x][y] = clamp(green);
-      this.blues[x][y] = clamp(blue);
     } catch (IndexOutOfBoundsException iob) {
       throw iob;
     }
@@ -211,7 +189,6 @@ public class ImageProcessor implements ImageModel {
 
   private int[][] convolute(double[][] kernel, int[][] channel) {
     int kernelSize = kernel.length;
-//    System.out.println(kernelSize);
     int padding = (kernelSize - 1) / 2;
     double[][] paddedMatrix = padChannel(channel, padding, this.height, this.width);
     int[][] convolutedChannel = convolutionHelper(paddedMatrix, kernel, padding);
@@ -259,7 +236,6 @@ public class ImageProcessor implements ImageModel {
 
         for (int x = select_index_start_i; x < select_index_end_i; x++) {
           for (int y = select_index_start_j; y < select_index_end_j; y++) {
-
             selectedMatrix[index_i][index_j] = paddedMatrix[x][y];
             index_j++;
           }
@@ -279,12 +255,9 @@ public class ImageProcessor implements ImageModel {
     double sum = 0;
     for (int i = 0; i < kernel.length; i++) {
       for (int j = 0; j < kernel.length; j++) {
-
         sum = sum + selectedMatrix[i][j] * kernel[i][j];
-
       }
     }
-
     return sum;
   }
 
