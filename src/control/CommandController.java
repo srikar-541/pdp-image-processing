@@ -12,6 +12,7 @@ import control.commands.Blur;
 import control.commands.CheckeredBoard;
 import control.commands.Edge;
 import control.commands.GaussianBlur;
+import control.commands.GreeceFlag;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
 import control.commands.MotionBlur;
@@ -54,7 +55,6 @@ public class CommandController {
             return;
           case "load":
             BufferedImage img = readImage("input/ACbig.jpg");
-//            BufferedImage img=readImage("input/mario.png");
             model = new ImageProcessor(img);
             break;
           case "sepia":
@@ -72,7 +72,6 @@ public class CommandController {
           case "gaussianblur":
             cmd = new GaussianBlur();
             break;
-
           case "edge":
             cmd = new Edge();
             break;
@@ -100,6 +99,13 @@ public class CommandController {
             int size = s.nextInt();
             model = new ImageProcessor(colsCount * size, rowsCount * size);
             cmd = new CheckeredBoard(rowsCount, colsCount, size);
+            break;
+          case "GreeceFlag":
+            height = s.nextInt();
+            height = height / 18 * 18;
+            int width = 3 * height / 2;
+            model = new ImageProcessor(width, height);
+            cmd = new GreeceFlag(width, height);
             break;
         }
         if (cmd != null) {
