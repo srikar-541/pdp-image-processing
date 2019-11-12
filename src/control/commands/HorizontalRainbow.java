@@ -7,14 +7,25 @@ import java.util.List;
 import control.ImageProcessingCommand;
 import model.ImageModel;
 
+/**
+ * This class is an macro which generates a Horizontal rainbow by taking the
+ * length of the flag to be generated and the thickness of each rainbow color band.
+ */
 public class HorizontalRainbow implements ImageProcessingCommand {
   private int length;
   private int thickness;
   List<Color> colorList;
 
-  public HorizontalRainbow(int length, int thickness){
-    this.length=length;
-    this.thickness=thickness;
+  /**
+   * This constructor creates an object of HorizontalRainbow by taking parameters
+   * as the length of the image and thickness of each color band.
+   * @param     length The length/width of the flag to be generated.
+   * @param     thickness The thickness of each color band.
+   */
+  public HorizontalRainbow(int length, int thickness) {
+    this.length = length;
+    this.thickness = thickness;
+
     colorList = new ArrayList<>(7);
     colorList.add(new Color(148, 0, 211));
     colorList.add(new Color(75, 0, 130));

@@ -1,5 +1,3 @@
-package control;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,15 +6,13 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import control.ImageProcessingCommand;
 import control.commands.Blur;
 import control.commands.CheckeredBoard;
-import control.commands.Edge;
 import control.commands.FranceFlag;
-import control.commands.GaussianBlur;
 import control.commands.GreeceFlag;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
-import control.commands.MotionBlur;
 import control.commands.Save;
 import control.commands.Sepia;
 import control.commands.Sharpen;
@@ -25,7 +21,7 @@ import control.commands.VerticalRainbow;
 import model.ImageModel;
 import model.ImageProcessor;
 
-public class CommandController {
+public class ProgramRunner {
 
   private static BufferedImage readImage(String filepath) {
     BufferedImage image = null;
@@ -65,7 +61,6 @@ public class CommandController {
             System.out.println("Read image from " + filePath + " of : ");
             System.out.println("width: " + img.getWidth());
             System.out.println("height: " + img.getHeight());
-
             break;
           case "sepia":
             cmd = new Sepia();
@@ -76,12 +71,6 @@ public class CommandController {
           case "blur":
             cmd = new Blur();
             break;
-          case "motionblur":
-            cmd = new MotionBlur();
-            break;
-          case "gaussianblur":
-            cmd = new GaussianBlur();
-            break;
           case "France":
             System.out.println("Specify width of the flag:");
             int width = s.nextInt();
@@ -91,11 +80,9 @@ public class CommandController {
           case "Switzerland":
             System.out.println("Specify width of the flag:");
             width = s.nextInt();
-            model = new ImageProcessor(width, width);
+            int height = width;
+            model = new ImageProcessor(width, height);
             cmd = new Switzerland(width);
-            break;
-          case "edge":
-            cmd = new Edge();
             break;
           case "sharpen":
             cmd = new Sharpen();
@@ -115,7 +102,7 @@ public class CommandController {
             System.out.println("Specify the width of a stripe:");
             int bandwidth = s.nextInt();
             System.out.println("Specify the height of the stripe:");
-            int height = s.nextInt();
+            height = s.nextInt();
             model = new ImageProcessor(bandwidth * 7, height);
             cmd = new VerticalRainbow(height, bandwidth);
             break;
@@ -124,7 +111,7 @@ public class CommandController {
             int colsCount = s.nextInt();
             int size = s.nextInt();
             model = new ImageProcessor(colsCount * size, rowsCount * size);
-            cmd = new CheckeredBoard(rowsCount, colsCount, size);
+            cmd = new CheckeredBoard(size);
             break;
           case "Greece":
             System.out.println("Specify the height of the flag:");

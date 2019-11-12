@@ -5,11 +5,18 @@ import java.awt.*;
 import control.ImageProcessingCommand;
 import model.ImageModel;
 
+/**
+ * This class is an macro which generates a Greece flag of a given width and height.
+ */
 public class GreeceFlag implements ImageProcessingCommand {
 
   private final int height;
   private final int width;
 
+  /**
+   * This creates an object of GreeceFlag by taking in width, height as inputs.
+   * @param     width Width, height are the width and height of the flag to be generated.
+   */
   public GreeceFlag(int width, int height) {
     this.height = height;
     this.width = width;

@@ -7,15 +7,26 @@ import java.util.List;
 import control.ImageProcessingCommand;
 import model.ImageModel;
 
+/**
+ * This class is an macro which generates a Vertical rainbow by taking the
+ * height of the flag to be generated and the width of each rainbow color band.
+ */
 public class VerticalRainbow implements ImageProcessingCommand {
 
   private int height;
   private int bandwidth;
   private List<Color> colorList;
 
-  public VerticalRainbow(int height, int bandwidth){
-    this.height=height;
-    this.bandwidth=bandwidth;
+  /**
+   * This constructor creates an object of VerticalRainbow by taking parameters
+   * as the height of the image and the width of each color band.
+   * @param     height The height of the flag to be generated.
+   * @param     bandwidth The width of each color band.
+   */
+  public VerticalRainbow(int height, int bandwidth) {
+    this.height = height;
+    this.bandwidth = bandwidth;
+
     colorList = new ArrayList<>(7);
     colorList.add(new Color(148, 0, 211));
     colorList.add(new Color(75, 0, 130));

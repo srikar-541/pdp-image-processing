@@ -3,14 +3,28 @@ package model;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+/**
+ * This class is an implementation of the ImageModel. It implements the
+ * functionality of filtering, transforming and image generation.
+ */
 public class ImageProcessor implements ImageModel {
 
   private int[][] reds;
   private int[][] greens;
   private int[][] blues;
+
   private final int height;
   private final int width;
 
+  /**
+   * This creates an object of type ImageProcessor by taking a BufferedImage as input.
+   * The image is loaded by reading the individual r,g,b pixel values from a
+   * BufferedImage and setting them in the blue, green and red matrices. This
+   * object is created when filtering/coloring operation is to applied.
+   *
+   * @param image The original image on which operations of filtering,
+   *              transforming are to be applied.
+   */
   public ImageProcessor(BufferedImage image) {
     this.width = image.getWidth();
     this.height = image.getHeight();
@@ -19,6 +33,10 @@ public class ImageProcessor implements ImageModel {
     this.greens = new int[height][width];
     this.blues = new int[height][width];
 
+    loadImage(image);
+  }
+
+  private void loadImage(BufferedImage image) {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         int pixel = image.getRGB(j, i);
@@ -26,11 +44,18 @@ public class ImageProcessor implements ImageModel {
         reds[i][j] = color.getRed();
         greens[i][j] = color.getGreen();
         blues[i][j] = color.getBlue();
-
       }
     }
   }
 
+  /**
+   * This creates an object of type ImageProcessor by taking height and
+   * width as input and setting the matrix of r,g,b to default.
+   * This constructor is used when images are to be generated.
+   *
+   * @param width  The width of the image to be generated.
+   * @param height The height of the image to be generated.
+   */
   public ImageProcessor(int width, int height) {
     this.width = width;
     this.height = height;
@@ -39,6 +64,8 @@ public class ImageProcessor implements ImageModel {
     this.blues = new int[height][width];
   }
 
+  //This methods clamps color of red,blue,green. It sets the value to 0 if
+  //the value passed is < 0 and 255 if the value passed is > 255.
   private int clamp(int value) {
     if (value < 0) {
       return 0;
@@ -46,6 +73,7 @@ public class ImageProcessor implements ImageModel {
     return Math.min(255, value);
   }
 
+  //The pixel value is returned by taking in the red,green,blue color values.
   private int pixelVal(int red, int green, int blue) {
     return (red << 16) | (green << 8) | blue;
   }
@@ -62,7 +90,6 @@ public class ImageProcessor implements ImageModel {
     }
     return result;
   }
-
 
   @Override
   public void transform(double[][] transformer) {
@@ -105,7 +132,6 @@ public class ImageProcessor implements ImageModel {
   public void setBlue(int x, int y, int blue) {
     this.blues[y][x] = clamp(blue);
   }
-
 
   @Override
   public void setPixel(int x, int y, int pixel) {
@@ -219,14 +245,12 @@ public class ImageProcessor implements ImageModel {
           index_j = 0;
           index_i++;
         }
-
         int val = (int) Math.round(convolutedValue(selectedMatrix, kernel));
         convolutedChannel[i][j] = clamp(val);
       }
     }
     return convolutedChannel;
   }
-
 
   private double convolutedValue(double[][] selectedMatrix, double[][] kernel) {
     double sum = 0;
@@ -249,5 +273,4 @@ public class ImageProcessor implements ImageModel {
     }
     return channelWithPadding;
   }
-
 }
