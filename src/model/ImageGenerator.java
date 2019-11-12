@@ -1,7 +1,6 @@
 package model;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 public interface ImageGenerator {
 
@@ -10,8 +9,6 @@ public interface ImageGenerator {
   void setGreen(int x, int y, int green);
 
   void setBlue(int x, int y, int blue);
-
-  void setAlpha(int x, int y, int alpha);
 
   void setPixel(int x, int y, int pixel);
 

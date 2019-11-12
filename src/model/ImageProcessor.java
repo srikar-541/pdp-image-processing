@@ -86,9 +86,9 @@ public class ImageProcessor implements ImageModel {
 
   @Override
   public void filter(double[][] filter) {
-    this.reds = convolute(filter, this.reds);
-    this.greens = convolute(filter, this.greens);
-    this.blues = convolute(filter, this.blues);
+    this.reds = convolve(filter, this.reds);
+    this.greens = convolve(filter, this.greens);
+    this.blues = convolve(filter, this.blues);
   }
 
   @Override
@@ -106,10 +106,6 @@ public class ImageProcessor implements ImageModel {
     this.blues[y][x] = clamp(blue);
   }
 
-  @Override
-  public void setAlpha(int x, int y, int alpha) {
-
-  }
 
   @Override
   public void setPixel(int x, int y, int pixel) {
@@ -120,7 +116,6 @@ public class ImageProcessor implements ImageModel {
     this.reds[x][y] = clamp(red);
     this.greens[x][y] = clamp(green);
     this.blues[x][y] = clamp(blue);
-
   }
 
   @Override
@@ -171,7 +166,7 @@ public class ImageProcessor implements ImageModel {
     }
   }
 
-  private int[][] convolute(double[][] kernel, int[][] channel) {
+  private int[][] convolve(double[][] kernel, int[][] channel) {
     int kernelSize = kernel.length;
     int padding = (kernelSize - 1) / 2;
     double[][] paddedMatrix = padChannel(channel, padding, this.height, this.width);
@@ -182,12 +177,10 @@ public class ImageProcessor implements ImageModel {
   private int[][] removePadding(int[][] convolutedMatrix, int padding) {
     int[][] noPadding = new int[convolutedMatrix.length - 2 * padding][convolutedMatrix[0]
             .length - 2 * padding];
-
     int end_i = convolutedMatrix.length - padding;
     int end_j = convolutedMatrix[0].length - padding;
     int x = 0;
     int y = 0;
-
     for (int i = padding; i < end_i; i++) {
       for (int j = padding; j < end_j; j++) {
         noPadding[x][y] = convolutedMatrix[i][j];
