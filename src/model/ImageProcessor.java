@@ -1,6 +1,6 @@
 package model;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public class ImageProcessor implements ImageModel {
@@ -18,6 +18,7 @@ public class ImageProcessor implements ImageModel {
     this.reds = new int[height][width];
     this.greens = new int[height][width];
     this.blues = new int[height][width];
+
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         int pixel = image.getRGB(j, i);

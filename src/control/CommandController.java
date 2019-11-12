@@ -36,9 +36,6 @@ public class CommandController {
     } catch (IOException e) {
       System.out.println(e.getMessage());
     }
-    System.out.println("Read image from " + filepath + " of : ");
-    System.out.println("width: " + image.getWidth());
-    System.out.println("height: " + image.getHeight());
     return image;
   }
 
@@ -47,6 +44,12 @@ public class CommandController {
     Scanner s = new Scanner(System.in);
     ImageModel model = null;
     ImageProcessingCommand cmd = null;
+    System.out.println("Enter an option: you either load or generate an image. Type q or quit.");
+    System.out.println("your options are: sepia,greyscale,blur,motionblur,"
+            + "gaussianblur,sharpen,edge");
+    System.out.println("You can also generate the following images:");
+    System.out.println("The flags of France, Switzerland,Greece ");
+    System.out.println("Horizontal Rainbow, Vertical Rainbow and CheckeredBoard");
     while (s.hasNext()) {
       String in = s.nextLine();
       try {
@@ -55,9 +58,14 @@ public class CommandController {
           case "quit":
             return;
           case "load":
+            System.out.println("Enter file path:");
             String filePath = s.nextLine();
             BufferedImage img = readImage(filePath);
             model = new ImageProcessor(img);
+            System.out.println("Read image from " + filePath + " of : ");
+            System.out.println("width: " + img.getWidth());
+            System.out.println("height: " + img.getHeight());
+
             break;
           case "sepia":
             cmd = new Sepia();
@@ -74,12 +82,14 @@ public class CommandController {
           case "gaussianblur":
             cmd = new GaussianBlur();
             break;
-          case "france":
+          case "France":
+            System.out.println("Specify width of the flag:");
             int width = s.nextInt();
             model = new ImageProcessor(width, (2 * width) / 3);
             cmd = new FranceFlag(width);
             break;
-          case "switzerland":
+          case "Switzerland":
+            System.out.println("Specify width of the flag:");
             width = s.nextInt();
             model = new ImageProcessor(width, width);
             cmd = new Switzerland(width);
@@ -93,26 +103,31 @@ public class CommandController {
           case "save":
             cmd = new Save("output/model.png");
             break;
-          case "rainbow h":
+          case "Horizontal Rainbow":
+            System.out.println("Specify thickness of one stripe:");
             int thickness = s.nextInt();
+            System.out.println("Specify the length of a stripe:");
             int length = s.nextInt();
             model = new ImageProcessor(length, thickness * 7);
             cmd = new HorizontalRainbow(length, thickness);
             break;
-          case "rainbow v":
-            int height = s.nextInt();
+          case "Vertical Rainbow":
+            System.out.println("Specify the width of a stripe:");
             int bandwidth = s.nextInt();
+            System.out.println("Specify the height of the stripe:");
+            int height = s.nextInt();
             model = new ImageProcessor(bandwidth * 7, height);
             cmd = new VerticalRainbow(height, bandwidth);
             break;
-          case "checkeredBoard":
+          case "CheckeredBoard":
             int rowsCount = s.nextInt();
             int colsCount = s.nextInt();
             int size = s.nextInt();
             model = new ImageProcessor(colsCount * size, rowsCount * size);
             cmd = new CheckeredBoard(rowsCount, colsCount, size);
             break;
-          case "GreeceFlag":
+          case "Greece":
+            System.out.println("Specify the height of the flag:");
             height = s.nextInt();
             height = height / 18 * 18;
             width = 3 * height / 2;
