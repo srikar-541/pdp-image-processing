@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import control.commands.Blur;
 import control.commands.CheckeredBoard;
 import control.commands.Edge;
+import control.commands.FranceFlag;
 import control.commands.GaussianBlur;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
@@ -18,6 +19,7 @@ import control.commands.MotionBlur;
 import control.commands.Save;
 import control.commands.Sepia;
 import control.commands.Sharpen;
+import control.commands.Switzerland;
 import control.commands.VerticalRainbow;
 import model.ImageModel;
 import model.ImageProcessor;
@@ -53,7 +55,7 @@ public class CommandController {
           case "quit":
             return;
           case "load":
-            BufferedImage img = readImage("input/ACbig.jpg");
+            BufferedImage img = readImage("input/AC2.jpg");
 //            BufferedImage img=readImage("input/mario.png");
             model = new ImageProcessor(img);
             break;
@@ -72,7 +74,16 @@ public class CommandController {
           case "gaussianblur":
             cmd = new GaussianBlur();
             break;
-
+          case "france":
+            int width=s.nextInt();
+            model=new ImageProcessor(width,(2*width)/3);
+            cmd=new FranceFlag(width);
+            break;
+          case "switzerland":
+            width=s.nextInt();
+            model=new ImageProcessor(width,width);
+            cmd=new Switzerland(width);
+            break;
           case "edge":
             cmd = new Edge();
             break;
