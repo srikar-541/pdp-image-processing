@@ -40,9 +40,8 @@ public class ProgramRunner {
     Scanner s = new Scanner(System.in);
     ImageModel model = null;
     ImageProcessingCommand cmd = null;
-    System.out.println("Enter an option: you either load or generate an image. Type q or quit.");
-    System.out.println("your options are: sepia,greyscale,blur,motionblur,"
-            + "gaussianblur,sharpen,edge");
+    System.out.println("Enter an option: you either load or generate an image. Type q to quit.");
+    System.out.println("your options are: sepia,greyscale,blur,sharpen,edge");
     System.out.println("You can also generate the following images:");
     System.out.println("The flags of France, Switzerland,Greece ");
     System.out.println("Horizontal Rainbow, Vertical Rainbow and CheckeredBoard");
@@ -51,7 +50,6 @@ public class ProgramRunner {
       try {
         switch (in) {
           case "q":
-          case "quit":
             return;
           case "load":
             System.out.println("Enter file path:");
@@ -107,10 +105,8 @@ public class ProgramRunner {
             cmd = new VerticalRainbow(height, bandwidth);
             break;
           case "CheckeredBoard":
-            int rowsCount = s.nextInt();
-            int colsCount = s.nextInt();
             int size = s.nextInt();
-            model = new ImageProcessor(colsCount * size, rowsCount * size);
+            model = new ImageProcessor(8 * size, 8 * size);
             cmd = new CheckeredBoard(size);
             break;
           case "Greece":
