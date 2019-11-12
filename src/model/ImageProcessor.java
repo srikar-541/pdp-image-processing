@@ -53,7 +53,6 @@ public class ImageProcessor implements ImageModel {
   @Override
   public BufferedImage getImage() {
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         int pixel = pixelVal(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
@@ -94,29 +93,17 @@ public class ImageProcessor implements ImageModel {
 
   @Override
   public void setRed(int x, int y, int red) {
-    try {
-      this.reds[y][x] = clamp(red);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.reds[y][x] = clamp(red);
   }
 
   @Override
   public void setGreen(int x, int y, int green) {
-    try {
-      this.greens[y][x] = clamp(green);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.greens[y][x] = clamp(green);
   }
 
   @Override
   public void setBlue(int x, int y, int blue) {
-    try {
-      this.blues[y][x] = clamp(blue);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.blues[y][x] = clamp(blue);
   }
 
   @Override
@@ -130,14 +117,10 @@ public class ImageProcessor implements ImageModel {
     int red = color.getRed();
     int green = color.getGreen();
     int blue = color.getBlue();
-    try {
-      this.reds[x][y] = clamp(red);
-      this.greens[x][y] = clamp(green);
-      this.blues[x][y] = clamp(blue);
+    this.reds[x][y] = clamp(red);
+    this.greens[x][y] = clamp(green);
+    this.blues[x][y] = clamp(blue);
 
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
   }
 
   @Override
