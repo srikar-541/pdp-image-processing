@@ -13,6 +13,7 @@ import control.commands.CheckeredBoard;
 import control.commands.Edge;
 import control.commands.FranceFlag;
 import control.commands.GaussianBlur;
+import control.commands.GreeceFlag;
 import control.commands.GreyScale;
 import control.commands.HorizontalRainbow;
 import control.commands.MotionBlur;
@@ -111,6 +112,13 @@ public class CommandController {
             int size = s.nextInt();
             model = new ImageProcessor(colsCount * size, rowsCount * size);
             cmd = new CheckeredBoard(rowsCount, colsCount, size);
+            break;
+          case "GreeceFlag":
+            height = s.nextInt();
+            height = height / 18 * 18;
+            width = 3 * height / 2;
+            model = new ImageProcessor(width, height);
+            cmd = new GreeceFlag(width, height);
             break;
         }
         if (cmd != null) {
