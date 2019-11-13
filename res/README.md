@@ -8,7 +8,8 @@
 
 Many applications use color images. A good number of these provide a way to change their appearance in different ways. For example, Instagram has “filters” that convert a picture into something more interesting. They do this by editing the colors of individual dots in the image (called pixels).
 
-This program provides functionalities to generate new images, filter existing images and perform color transformations on existing images.
+This program provides functionality to generate new images, filter existing images and perform color transformations on
+ existing images.
 At this time,
 It can perform sepia and grayscale color transformations.
 It can apply blur and sharpen filters.
@@ -20,6 +21,12 @@ Download the src folder and run the main in the ProgramRunner.java file.
 
 ##Prerequisites
 Java JDK version 11.0 or greater.
+
+##Usage
+Once you run the ProgramRunner.java file, it prompts the user to select options among loading an image, filtering an
+ image, color transforming an image and saving it. Once various operations have been selected, the file can be saved
+  to a file using the save option by providing an option to enter path of the file to which the image has to be
+   written. To terminate the execution, you enter 'q'. 
 
 
 ##Citation

@@ -98,14 +98,14 @@ public class ImageProcessor implements ImageModel {
         int g = this.greens[i][j];
         int b = this.blues[i][j];
 
-        this.reds[i][j] = clamp((int) Math.floor(r * transformer[0][0] +
-                g * transformer[0][1] + b * transformer[0][2]));
+        this.reds[i][j] = clamp((int) Math.floor(r * transformer[0][0]
+                + g * transformer[0][1] + b * transformer[0][2]));
 
-        this.greens[i][j] = clamp((int) Math.floor(r * transformer[1][0] +
-                g * transformer[1][1] + b * transformer[1][2]));
+        this.greens[i][j] = clamp((int) Math.floor(r * transformer[1][0]
+                + g * transformer[1][1] + b * transformer[1][2]));
 
-        this.blues[i][j] = clamp((int) Math.floor(r * transformer[2][0] +
-                g * transformer[2][1] + b * transformer[2][2]));
+        this.blues[i][j] = clamp((int) Math.floor(r * transformer[2][0]
+                + g * transformer[2][1] + b * transformer[2][2]));
       }
     }
   }
@@ -226,14 +226,14 @@ public class ImageProcessor implements ImageModel {
     for (int i = padding; i < end_i; i++) {
       for (int j = padding; j < end_j; j++) {
 
-        int select_index_start_i = i - padding;
-        int select_index_start_j = j - padding;
+        int selectIndexStartI = i - padding;
+        int selectIndexStartJ = j - padding;
 
-        int select_index_end_i = i + padding + 1;
-        int select_index_end_j = j + padding + 1;
+        int selectIndexEndI = i + padding + 1;
+        int selectIndexEndJ = j + padding + 1;
 
-        double[][] selectedMatrix = selectMatrix(select_index_start_i, select_index_end_i,
-                select_index_start_j, select_index_end_j, kernelSize, paddedMatrix);
+        double[][] selectedMatrix = selectMatrix(selectIndexStartI, selectIndexEndI,
+                selectIndexStartJ, selectIndexEndJ, kernelSize, paddedMatrix);
         convolutedChannel[i][j] = clamp((int) Math.round(convolutedValue(selectedMatrix, kernel)));
 
       }
@@ -241,13 +241,15 @@ public class ImageProcessor implements ImageModel {
     return convolutedChannel;
   }
 
-  private double[][] selectMatrix(int select_index_start_i, int select_index_end_i, int select_index_start_j, int select_index_end_j, int kernelSize, double[][] paddedMatrix) {
+  private double[][] selectMatrix(int selectIndexStartI, int selectIndexEndI,
+                                  int selectIndexStartJ, int selectIndexEndJ, int kernelSize,
+                                  double[][] paddedMatrix) {
     double[][] selectedMatrix = new double[kernelSize][kernelSize];
     int index_i = 0;
     int index_j = 0;
 
-    for (int x = select_index_start_i; x < select_index_end_i; x++) {
-      for (int y = select_index_start_j; y < select_index_end_j; y++) {
+    for (int x = selectIndexStartI; x < selectIndexEndI; x++) {
+      for (int y = selectIndexStartJ; y < selectIndexEndJ; y++) {
         selectedMatrix[index_i][index_j] = paddedMatrix[x][y];
         index_j++;
       }

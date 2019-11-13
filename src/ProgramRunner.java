@@ -22,9 +22,8 @@ import model.ImageModel;
 import model.ImageProcessor;
 
 /**
- * This class runs the ImageProcessor application.
- * It gives user options like loading an image, filtering, coloring
- * and generating an image.
+ * This class runs the ImageProcessor application. It gives user options like loading an image,
+ * filtering, coloring and generating an image.
  */
 public class ProgramRunner {
 
