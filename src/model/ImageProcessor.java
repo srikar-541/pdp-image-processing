@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
- * This class is an implementation of the ImageModel. It implements the
- * functionality of filtering, transforming and image generation.
+ * This class is an implementation of the ImageModel. It implements the functionality of filtering,
+ * transforming and image generation.
  */
 public class ImageProcessor implements ImageModel {
 
@@ -17,13 +17,13 @@ public class ImageProcessor implements ImageModel {
   private final int width;
 
   /**
-   * This creates an object of type ImageProcessor by taking a BufferedImage as input.
-   * The image is loaded by reading the individual r,g,b pixel values from a
-   * BufferedImage and setting them in the blue, green and red matrices. This
-   * object is created when filtering/coloring operation is to applied.
+   * This creates an object of type ImageProcessor by taking a BufferedImage as input. The image is
+   * loaded by reading the individual r,g,b pixel values from a BufferedImage and setting them in
+   * the blue, green and red matrices. This object is created when filtering/coloring operation is
+   * to applied.
    *
-   * @param image The original image on which operations of filtering,
-   *              transforming are to be applied.
+   * @param image The original image on which operations of filtering, transforming are to be
+   *              applied.
    */
   public ImageProcessor(BufferedImage image) {
     this.width = image.getWidth();
@@ -49,9 +49,8 @@ public class ImageProcessor implements ImageModel {
   }
 
   /**
-   * This creates an object of type ImageProcessor by taking height and
-   * width as input and setting the matrix of r,g,b to default.
-   * This constructor is used when images are to be generated.
+   * This creates an object of type ImageProcessor by taking height and width as input and setting
+   * the matrix of r,g,b to default. This constructor is used when images are to be generated.
    *
    * @param width  The width of the image to be generated.
    * @param height The height of the image to be generated.
@@ -233,24 +232,31 @@ public class ImageProcessor implements ImageModel {
         int select_index_end_i = i + padding + 1;
         int select_index_end_j = j + padding + 1;
 
-        double[][] selectedMatrix = new double[kernelSize][kernelSize];
-        int index_i = 0;
-        int index_j = 0;
+        double[][] selectedMatrix = selectMatrix(select_index_start_i, select_index_end_i,
+                select_index_start_j, select_index_end_j, kernelSize, paddedMatrix);
+        convolutedChannel[i][j] = clamp((int) Math.round(convolutedValue(selectedMatrix, kernel)));
 
-        for (int x = select_index_start_i; x < select_index_end_i; x++) {
-          for (int y = select_index_start_j; y < select_index_end_j; y++) {
-            selectedMatrix[index_i][index_j] = paddedMatrix[x][y];
-            index_j++;
-          }
-          index_j = 0;
-          index_i++;
-        }
-        int val = (int) Math.round(convolutedValue(selectedMatrix, kernel));
-        convolutedChannel[i][j] = clamp(val);
       }
     }
     return convolutedChannel;
   }
+
+  private double[][] selectMatrix(int select_index_start_i, int select_index_end_i, int select_index_start_j, int select_index_end_j, int kernelSize, double[][] paddedMatrix) {
+    double[][] selectedMatrix = new double[kernelSize][kernelSize];
+    int index_i = 0;
+    int index_j = 0;
+
+    for (int x = select_index_start_i; x < select_index_end_i; x++) {
+      for (int y = select_index_start_j; y < select_index_end_j; y++) {
+        selectedMatrix[index_i][index_j] = paddedMatrix[x][y];
+        index_j++;
+      }
+      index_j = 0;
+      index_i++;
+    }
+    return selectedMatrix;
+  }
+
 
   private double convolutedValue(double[][] selectedMatrix, double[][] kernel) {
     double sum = 0;
