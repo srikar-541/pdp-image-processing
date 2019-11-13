@@ -14,5 +14,5 @@ public interface ImageProcessingCommand {
    * @param     model Model interface which contains the functionality specific
    *                 to the implementation.
    */
-  void go(ImageModel model);
+  void process(ImageModel model);
 }

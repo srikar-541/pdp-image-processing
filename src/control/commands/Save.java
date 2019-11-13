@@ -26,7 +26,7 @@ public class Save implements ImageProcessingCommand {
   }
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
     BufferedImage image = model.getImage();
     writeImage(image, this.filepath);
   }

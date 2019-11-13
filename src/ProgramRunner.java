@@ -21,6 +21,11 @@ import control.commands.VerticalRainbow;
 import model.ImageModel;
 import model.ImageProcessor;
 
+/**
+ * This class runs the ImageProcessor application.
+ * It gives user options like loading an image, filtering, coloring
+ * and generating an image.
+ */
 public class ProgramRunner {
 
   private static BufferedImage readImage(String filepath) {
@@ -35,6 +40,11 @@ public class ProgramRunner {
     return image;
   }
 
+  /**
+   * This is the entry point of the application. User interaction code resides here.
+   *
+   * @param args Command Line Arguments
+   */
   public static void main(String[] args) {
 
     Scanner s = new Scanner(System.in);
@@ -86,7 +96,9 @@ public class ProgramRunner {
             cmd = new Sharpen();
             break;
           case "save":
-            cmd = new Save("output/model.png");
+            System.out.println("Enter file path:");
+            filePath = s.nextLine();
+            cmd = new Save(filePath);
             break;
           case "Horizontal Rainbow":
             System.out.println("Specify thickness of one stripe:");
@@ -117,9 +129,12 @@ public class ProgramRunner {
             model = new ImageProcessor(width, height);
             cmd = new GreeceFlag(width, height);
             break;
+          default:
+            System.out.println("Invalid operation");
+            break;
         }
         if (cmd != null) {
-          cmd.go(model);
+          cmd.process(model);
           System.out.println(".....Done.");
           cmd = null;
         }

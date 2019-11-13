@@ -1,6 +1,6 @@
 package control.commands;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class FranceFlag implements ImageProcessingCommand {
   }
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
     int stripSize = this.width / 3;
     int height = (2 * width) / 3;
     for (int i = 0; i < 3; i++) {

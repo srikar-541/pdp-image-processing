@@ -1,6 +1,6 @@
 package control.commands;
 
-import java.awt.*;
+import java.awt.Color;
 
 import control.ImageProcessingCommand;
 import model.ImageModel;
@@ -23,7 +23,7 @@ public class CheckeredBoard implements ImageProcessingCommand {
   }
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
     for (int i = 0; i < 8; i++) {
       int boxNumber = i % 2 == 0 ? 0 : 1;
       for (int j = 0; j < 8; j++) {

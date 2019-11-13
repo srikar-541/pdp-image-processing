@@ -1,6 +1,6 @@
 package control.commands;
 
-import java.awt.*;
+import java.awt.Color;
 
 import control.ImageProcessingCommand;
 import model.ImageModel;
@@ -23,7 +23,7 @@ public class GreeceFlag implements ImageProcessingCommand {
   }
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
     int thickness = height / 9;
     int bandWidth = width / 15;
     Color blueColor = new Color(13, 94, 175);

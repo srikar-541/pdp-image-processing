@@ -1,6 +1,6 @@
 package control.commands;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class HorizontalRainbow implements ImageProcessingCommand {
   }
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
 
     int stripSize = this.thickness;
     for (int i = 0; i < 7; i++) {

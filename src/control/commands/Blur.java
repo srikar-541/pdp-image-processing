@@ -11,7 +11,7 @@ import model.ImageModel;
 public class Blur implements ImageProcessingCommand {
 
   @Override
-  public void go(ImageModel model) {
+  public void process(ImageModel model) {
 
     double[][] blur = {
             {1.0 / 16, 1.0 / 8, 1.0 / 16},
