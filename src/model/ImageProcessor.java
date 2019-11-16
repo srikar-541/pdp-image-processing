@@ -1,17 +1,30 @@
 package model;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+/**
+ * This class is an implementation of the ImageModel. It implements the functionality of filtering,
+ * transforming and image generation.
+ */
 public class ImageProcessor implements ImageModel {
 
   private int[][] reds;
   private int[][] greens;
   private int[][] blues;
+
   private final int height;
   private final int width;
-//  private int[][] alphas;
 
+  /**
+   * This creates an object of type ImageProcessor by taking a BufferedImage as input. The image is
+   * loaded by reading the individual r,g,b pixel values from a BufferedImage and setting them in
+   * the blue, green and red matrices. This object is created when filtering/coloring operation is
+   * to applied.
+   *
+   * @param image The original image on which operations of filtering, transforming are to be
+   *              applied.
+   */
   public ImageProcessor(BufferedImage image) {
     this.width = image.getWidth();
     this.height = image.getHeight();
@@ -19,7 +32,11 @@ public class ImageProcessor implements ImageModel {
     this.reds = new int[height][width];
     this.greens = new int[height][width];
     this.blues = new int[height][width];
-//    this.alphas=new int [height][height];
+
+    loadImage(image);
+  }
+
+  private void loadImage(BufferedImage image) {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         int pixel = image.getRGB(j, i);
@@ -27,26 +44,27 @@ public class ImageProcessor implements ImageModel {
         reds[i][j] = color.getRed();
         greens[i][j] = color.getGreen();
         blues[i][j] = color.getBlue();
-
-//        alphas[i][j]=color.getAlpha();
       }
     }
-//    System.out.println(this.height);
-//    System.out.println(this.width);
-//    System.out.println(reds.length);
-//    System.out.println(reds[0].length);
   }
 
+  /**
+   * This creates an object of type ImageProcessor by taking height and width as input and setting
+   * the matrix of r,g,b to default. This constructor is used when images are to be generated.
+   *
+   * @param width  The width of the image to be generated.
+   * @param height The height of the image to be generated.
+   */
   public ImageProcessor(int width, int height) {
     this.width = width;
     this.height = height;
-
     this.reds = new int[height][width];
     this.greens = new int[height][width];
     this.blues = new int[height][width];
-//    this.alphas=new int [height][height];
   }
 
+  //This methods clamps color of red,blue,green. It sets the value to 0 if
+  //the value passed is < 0 and 255 if the value passed is > 255.
   private int clamp(int value) {
     if (value < 0) {
       return 0;
@@ -54,30 +72,23 @@ public class ImageProcessor implements ImageModel {
     return Math.min(255, value);
   }
 
-  private int pixelVal(int alpha, int red, int green, int blue) {
-    return (alpha << 24) | (red << 16) | (green << 8) | blue;
-  }
-
-  private int pixelVal2(int red, int green, int blue) {
+  //The pixel value is returned by taking in the red,green,blue color values.
+  private int pixelVal(int red, int green, int blue) {
     return (red << 16) | (green << 8) | blue;
   }
 
   @Override
   public BufferedImage getImage() {
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-//        int pixel= pixelVal(this.alphas[i][j],this.reds[i][j],this.greens[i][j],this.blues[i][j]);
-//        int pixel= pixelVal(255,this.reds[i][j],this.greens[i][j],this.blues[i][j]);
-        int pixel = pixelVal2(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
+        int pixel = pixelVal(this.reds[i][j], this.greens[i][j], this.blues[i][j]);
 
         result.setRGB(j, i, pixel);
       }
     }
     return result;
   }
-
 
   @Override
   public void transform(double[][] transformer) {
@@ -87,126 +98,38 @@ public class ImageProcessor implements ImageModel {
         int g = this.greens[i][j];
         int b = this.blues[i][j];
 
-        this.reds[i][j] = clamp((int) Math.floor(r * transformer[0][0] +
-                g * transformer[0][1] + b * transformer[0][2]));
+        this.reds[i][j] = clamp((int) Math.floor(r * transformer[0][0]
+                + g * transformer[0][1] + b * transformer[0][2]));
 
-        this.greens[i][j] = clamp((int) Math.floor(r * transformer[1][0] +
-                g * transformer[1][1] + b * transformer[1][2]));
+        this.greens[i][j] = clamp((int) Math.floor(r * transformer[1][0]
+                + g * transformer[1][1] + b * transformer[1][2]));
 
-        this.blues[i][j] = clamp((int) Math.floor(r * transformer[2][0] +
-                g * transformer[2][1] + b * transformer[2][2]));
+        this.blues[i][j] = clamp((int) Math.floor(r * transformer[2][0]
+                + g * transformer[2][1] + b * transformer[2][2]));
       }
     }
   }
 
   @Override
   public void filter(double[][] filter) {
-    int[][] tempR = new int[this.height][this.width];
-    int[][] tempG = new int[this.height][this.width];
-    int[][] tempB = new int[this.height][this.width];
-
-    for (int i = 0; i < this.height; i++) {
-      for (int j = 0; j < this.width; j++) {
-        tempR[i][j] = clamp((int) Math.round(transformHelper(this.reds, filter, i, j)));
-        tempG[i][j] = clamp((int) Math.round(transformHelper(this.greens, filter, i, j)));
-        tempB[i][j] = clamp((int) Math.round(transformHelper(this.blues, filter, i, j)));
-      }
-    }
-    this.reds = tempR;
-    this.greens = tempG;
-    this.blues = tempB;
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        this.reds[i][j] = tempR[i][j];
-        this.greens[i][j] = tempG[i][j];
-        this.blues[i][j] = tempB[i][j];
-      }
-    }
-  }
-
-  private double transformHelper(int[][] original, double[][] kernel, int rowIndex, int colIndex) {
-
-    int mid = kernel.length / 2;
-    double sum = 0;
-    int kIStart = 0;
-    int kJStart = 0;
-    int kIEnd = kernel.length - 1;
-    int kJEnd = kernel.length - 1;
-    int i = rowIndex;
-    int j = colIndex;
-
-    while (i - mid < 0) {
-      kIStart++;
-      i++;
-    }
-
-    while (j - mid < 0) {
-      kJStart++;
-      j++;
-    }
-
-    i = rowIndex;
-    j = colIndex;
-
-    while (i + mid >= original.length) {
-      kIEnd--;
-      i--;
-    }
-
-    while (j + mid >= original[0].length) {
-      kJEnd--;
-      j--;
-    }
-
-    int oI = Math.max(0, rowIndex - mid);
-    int oJ = Math.max(0, colIndex - mid);
-
-    for (i = kIStart; i <= kIEnd; i++) {
-      for (j = kJStart; j <= kJEnd; j++) {
-        sum = sum + kernel[i][j] * original[oI][oJ];
-        oJ++;
-      }
-      oI++;
-      oJ = Math.max(0, colIndex - mid);
-    }
-
-    return sum;
+    this.reds = convolve(filter, this.reds);
+    this.greens = convolve(filter, this.greens);
+    this.blues = convolve(filter, this.blues);
   }
 
   @Override
   public void setRed(int x, int y, int red) {
-    try {
-      this.reds[y][x] = clamp(red);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.reds[y][x] = clamp(red);
   }
 
   @Override
   public void setGreen(int x, int y, int green) {
-    try {
-      this.greens[y][x] = clamp(green);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.greens[y][x] = clamp(green);
   }
 
   @Override
   public void setBlue(int x, int y, int blue) {
-    try {
-      this.blues[y][x] = clamp(blue);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
-  }
-
-  @Override
-  public void setAlpha(int x, int y, int alpha) {
-//    try {
-//    this.alphas[x][y]=clamp(alpha);
-//  } catch(IndexOutOfBoundsException iob){
-//        throw iob;
-//        }
+    this.blues[y][x] = clamp(blue);
   }
 
   @Override
@@ -215,30 +138,9 @@ public class ImageProcessor implements ImageModel {
     int red = color.getRed();
     int green = color.getGreen();
     int blue = color.getBlue();
-    int alpha = color.getAlpha();
-    try {
-      this.reds[x][y] = clamp(red);
-      this.greens[x][y] = clamp(green);
-      this.blues[x][y] = clamp(blue);
-//      this.alphas[x][y]=clamp(alpha);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
-  }
-
-  public void setPixel(int x, int y, Color pixelColor) {
-    int red = pixelColor.getRed();
-    int green = pixelColor.getGreen();
-    int blue = pixelColor.getBlue();
-    int alpha = pixelColor.getAlpha();
-    try {
-      this.reds[x][y] = clamp(red);
-      this.greens[x][y] = clamp(green);
-      this.blues[x][y] = clamp(blue);
-//      this.alphas[x][y]=clamp(alpha);
-    } catch (IndexOutOfBoundsException iob) {
-      throw iob;
-    }
+    this.reds[x][y] = clamp(red);
+    this.greens[x][y] = clamp(green);
+    this.blues[x][y] = clamp(blue);
   }
 
   @Override
@@ -287,5 +189,96 @@ public class ImageProcessor implements ImageModel {
     for (int i = 0; i <= Math.abs(x1 - x2); i++) {
       drawVerticalLine(i + x1, y1, Math.abs(y2 - y1) + 1, bandColor);
     }
+  }
+
+  private int[][] convolve(double[][] kernel, int[][] channel) {
+    int kernelSize = kernel.length;
+    int padding = (kernelSize - 1) / 2;
+    double[][] paddedMatrix = padChannel(channel, padding, this.height, this.width);
+    int[][] convolutedChannel = convolutionHelper(paddedMatrix, kernel, padding);
+    return removePadding(convolutedChannel, padding);
+  }
+
+  private int[][] removePadding(int[][] convolutedMatrix, int padding) {
+    int[][] noPadding = new int[convolutedMatrix.length - 2 * padding][convolutedMatrix[0]
+            .length - 2 * padding];
+    int end_i = convolutedMatrix.length - padding;
+    int end_j = convolutedMatrix[0].length - padding;
+    int x = 0;
+    int y = 0;
+    for (int i = padding; i < end_i; i++) {
+      for (int j = padding; j < end_j; j++) {
+        noPadding[x][y] = convolutedMatrix[i][j];
+        y++;
+      }
+      y = 0;
+      x++;
+    }
+    return noPadding;
+  }
+
+  private int[][] convolutionHelper(double[][] paddedMatrix, double[][] kernel, int padding) {
+    int[][] convolutedChannel = new int[paddedMatrix.length][paddedMatrix[0].length];
+    int kernelSize = kernel.length;
+    int end_i = paddedMatrix.length - padding;
+    int end_j = paddedMatrix[end_i - 1].length - padding;
+
+    for (int i = padding; i < end_i; i++) {
+      for (int j = padding; j < end_j; j++) {
+
+        int selectIndexStartI = i - padding;
+        int selectIndexStartJ = j - padding;
+
+        int selectIndexEndI = i + padding + 1;
+        int selectIndexEndJ = j + padding + 1;
+
+        double[][] selectedMatrix = selectMatrix(selectIndexStartI, selectIndexEndI,
+                selectIndexStartJ, selectIndexEndJ, kernelSize, paddedMatrix);
+        convolutedChannel[i][j] = clamp((int) Math.round(convolutedValue(selectedMatrix, kernel)));
+
+      }
+    }
+    return convolutedChannel;
+  }
+
+  private double[][] selectMatrix(int selectIndexStartI, int selectIndexEndI,
+                                  int selectIndexStartJ, int selectIndexEndJ, int kernelSize,
+                                  double[][] paddedMatrix) {
+    double[][] selectedMatrix = new double[kernelSize][kernelSize];
+    int index_i = 0;
+    int index_j = 0;
+
+    for (int x = selectIndexStartI; x < selectIndexEndI; x++) {
+      for (int y = selectIndexStartJ; y < selectIndexEndJ; y++) {
+        selectedMatrix[index_i][index_j] = paddedMatrix[x][y];
+        index_j++;
+      }
+      index_j = 0;
+      index_i++;
+    }
+    return selectedMatrix;
+  }
+
+
+  private double convolutedValue(double[][] selectedMatrix, double[][] kernel) {
+    double sum = 0;
+    for (int i = 0; i < kernel.length; i++) {
+      for (int j = 0; j < kernel.length; j++) {
+        sum = sum + selectedMatrix[i][j] * kernel[i][j];
+      }
+    }
+    return sum;
+  }
+
+  private double[][] padChannel(int[][] channel, int padding, int height, int width) {
+    int channelWithPaddingHeight = height + 2 * padding;
+    int channelWithPaddingWidth = width + 2 * padding;
+    double[][] channelWithPadding = new double[channelWithPaddingHeight][channelWithPaddingWidth];
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        channelWithPadding[i + padding][j + padding] = channel[i][j];
+      }
+    }
+    return channelWithPadding;
   }
 }
